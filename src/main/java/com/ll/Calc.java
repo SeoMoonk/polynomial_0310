@@ -17,89 +17,25 @@ public class Calc {
         //ex) 10 + 20 - 30 == 0
         //sol => replace를 통해 10 - 20 을 10 + -20과 같이 고친다.
         // "- " => "+ -"
-        exp.replaceAll("- ", "+ -");
         //이 과정을 거치면 -> 더하기가 들어왔는지 빼기가 들어왔는지 이제 알 필요가 없다.
 
-        boolean needToPlus = exp.contains("+");
-        boolean needToMinus = exp.contains("-");
-        boolean needToMultiply = exp.contains("*");
-        boolean needToDivide = exp.contains("/");
+        //5단계 - 연산이 이제 3개가 아니라 몇개가 들어올지 모른다. 10개일지도...
+        //ex) 10 + 10 - 10 + 10 - 10 ...
 
-        String[] bits = null;
-        int a, b;
 
-        if (needToPlus) {
-            bits = exp.split(" \\+ ");
-            a = Integer.parseInt(bits[0]);
-            b = Integer.parseInt(bits[1]);
+        exp = exp.replaceAll("- ", "+ -");
 
-            return a + b;
-        } else if (needToMinus) {
-            bits = exp.split(" - ");
-            a = Integer.parseInt(bits[0]);
-            b = Integer.parseInt(bits[1]);
-
-            return a - b;
-        } else if (needToMultiply) {
-            bits = exp.split(" \\* ");
-            a = Integer.parseInt(bits[0]);
-            b = Integer.parseInt(bits[1]);
-
-            return a * b;
-        } else if (needToDivide) {
-            bits = exp.split(" / ");
-            a = Integer.parseInt(bits[0]);
-            b = Integer.parseInt(bits[1]);
-
-            return a / b;
-        } else {
-            throw new RuntimeException("올바른 계산식이 아닙니다.");
-
-        }
-    }
-}
-
-    /*
-    //static의 장점 => 객체화를 안하고 바로 쓸 수 있다.
-    public static int plus(String exp) {
         String[] bits = exp.split(" \\+ ");
 
-        int a = Integer.parseInt(bits[0]);
-        int b = Integer.parseInt(bits[1]);
+        int sum = 0;
 
-        return a + b;
+        for(int i=0; i<bits.length; i++)
+        {
+            sum += Integer.parseInt(bits[i]);
+        }
+
+        return sum;
+
+        // throw new RuntimeException("올바른 계산식이 아닙니다.");
     }
-
-
-    public static int minus(String exp) {
-
-        String[] bits = exp.split(" - ");
-
-        int a = Integer.parseInt(bits[0]);
-        int b = Integer.parseInt(bits[1]);
-
-        return a - b;
-    }
-
-    public static int multiply(String exp) {
-
-        String[] bits = exp.split(" \\* ");
-
-        int a = Integer.parseInt(bits[0]);
-        int b = Integer.parseInt(bits[1]);
-
-        return a * b;
-    }
-
-
-    public static int divide(String exp) {
-
-        String[] bits = exp.split(" / ");
-
-        int a = Integer.parseInt(bits[0]);
-        int b = Integer.parseInt(bits[1]);
-
-        return a / b;
-    }
-
-     */
+}
