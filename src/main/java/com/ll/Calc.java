@@ -22,19 +22,40 @@ public class Calc {
         //5단계 - 연산이 이제 3개가 아니라 몇개가 들어올지 모른다. 10개일지도...
         //ex) 10 + 10 - 10 + 10 - 10 ...
 
+        boolean needToMulti = exp.contains("*");
+        boolean needToPlus = !needToMulti;
 
-        exp = exp.replaceAll("- ", "+ -");
-
-        String[] bits = exp.split(" \\+ ");
-
-        int sum = 0;
-
-        for(int i=0; i<bits.length; i++)
+        if(needToPlus)
         {
-            sum += Integer.parseInt(bits[i]);
+            exp = exp.replaceAll("- ", "+ -");
+
+            String[] bits = exp.split(" \\+ ");
+
+            int sum = 0;
+
+            for(int i=0; i<bits.length; i++)
+            {
+                sum += Integer.parseInt(bits[i]);
+            }
+
+            return sum;
+
+        }
+        else if(needToMulti)
+        {
+            String[] bits = exp.split(" \\* ");
+
+            int sum = 1;
+
+            for(int i=0; i<bits.length; i++)
+            {
+                sum *= Integer.parseInt(bits[i]);
+            }
+
+            return sum;
         }
 
-        return sum;
+        return 0;
 
         // throw new RuntimeException("올바른 계산식이 아닙니다.");
     }
