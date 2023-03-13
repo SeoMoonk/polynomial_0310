@@ -35,7 +35,7 @@ public class Calc {
             return Integer.parseInt(exp);
 
         boolean needToMulti = exp.contains("*");
-        boolean needToPlus = exp.contains("+");
+        boolean needToPlus = exp.contains("+") || exp.contains(" - ");
 
         boolean needToCompound = needToMulti && needToPlus;
 
