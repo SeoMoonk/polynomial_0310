@@ -22,8 +22,26 @@ public class Calc {
         //5단계 - 연산이 이제 3개가 아니라 몇개가 들어올지 모른다. 10개일지도...
         //ex) 10 + 10 - 10 + 10 - 10 ...
 
+        //6단계 - 곱하기(*, multiply가 들어온다면??)
+
+        //7단계 - 더하기와 곱하기가 같이 나온다면? ( 10 + 2 * 3) ...
+
         boolean needToMulti = exp.contains("*");
-        boolean needToPlus = !needToMulti;
+        boolean needToPlus = exp.contains("+");
+
+        boolean needToCompound = needToMulti && needToPlus;
+
+        if(needToCompound)
+        {
+            String[] bits = exp.split(" \\+ ");
+            //분리하고 또 분리하는 방법 채택.
+            // "10" + "2 * 3"
+            // [0]  +  [1]
+
+
+            return Integer.parseInt(bits[0]) + run(bits[1]);
+            //10 + 6
+        }
 
         if(needToPlus)
         {
