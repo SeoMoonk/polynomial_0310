@@ -1,5 +1,8 @@
 package com.ll;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 public class Calc {
 
 
@@ -24,7 +27,12 @@ public class Calc {
 
         //6단계 - 곱하기(*, multiply가 들어온다면??)
 
-        //7단계 - 더하기와 곱하기가 같이 나온다면? ( 10 + 2 * 3) ...
+        //7단계 - 더하기와 곱하기가 같이 나온다면? ( 10 + 2 * 3)
+
+        //8단계 - 더하기와 곱하기가 같이 나오는데, 연산이 3개 이상이라면? (10 + 20 + 3 * 5)
+
+        if(!exp.contains(" "))
+            return Integer.parseInt(exp);
 
         boolean needToMulti = exp.contains("*");
         boolean needToPlus = exp.contains("+");
@@ -38,9 +46,13 @@ public class Calc {
             // "10" + "2 * 3"
             // [0]  +  [1]
 
+            //나눠서, 문장화를 다시 시키고, 또 연산한다..?
+            String newExp = Arrays.stream(bits)
+                    .mapToInt(Calc::run)
+                    .mapToObj(e -> e + "")
+                    .collect(Collectors.joining(" + "));
 
-            return Integer.parseInt(bits[0]) + run(bits[1]);
-            //10 + 6
+            return run(newExp);
         }
 
         if(needToPlus)

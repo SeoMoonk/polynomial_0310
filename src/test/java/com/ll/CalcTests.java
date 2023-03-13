@@ -58,12 +58,19 @@ public class CalcTests {
     @Test
     @DisplayName("10 + 2 * 3 == 16")
     void t14() {
-        //*을 탐지해서, 2*3을 먼저 처리하고, 10+6을 계산해야 하는데,
-        //현재의 상황에서는 *을 탐지했을때 (10 + 2) * (3) 이렇게 나눠버린다.
-        //sol -> 복합 연산인지를 검사하는 과정이 필요. "10" + ("2" * "3")
-
         assertThat(Calc.run("10 + 2 * 3")).isEqualTo(16);
     }
 
+    @Test
+    @DisplayName("10 + 20 + 5 * 3 == 45")
+    void t15() {
+        assertThat(Calc.run("10 + 20 + 5 * 3")).isEqualTo(45);
+    }
+
+    @Test
+    @DisplayName("10 * 20 + 10 + 5 * 3 == 225")
+    void t16() {
+        assertThat(Calc.run("10 * 20 + 10 + 5 * 3")).isEqualTo(225);
+    }
 
 }
