@@ -31,11 +31,42 @@ public class Calc {
 
         //8단계 - 더하기와 곱하기가 같이 나오는데, 연산이 3개 이상이라면? (10 + 20 + 3 * 5)
 
+        //9단계 - 이제 괄호의 처리도 가능해야 한다.
+        //어떻게 처리하면 좋을까 ? -> ( 를 발견하면 -> ) 가 나올떄 까지 탐색한다. (단, 괄호가 하나 더 나온다면 ...?)
+        // -> )를 찾으면, 그 사이의 내용을 가르고, 연산하고, 재 대입 한다.
+
+        //10단계 - 다중 괄호 처리하기
+
+        exp = stripOuterBrackets(exp);
+
         if(!exp.contains(" "))
             return Integer.parseInt(exp);
 
-        boolean needToMulti = exp.contains("*");
-        boolean needToPlus = exp.contains("+") || exp.contains(" - ");
+        boolean hasParse = exp.contains("(");
+
+//        if(hasParse)
+//        {
+//            int one = exp.indexOf("(");
+//            int two = exp.indexOf(")");
+//            int sum = 0;
+//
+//            String tmpstr;
+//
+//            tmpstr = exp.substring(one+1, two);
+//
+//            String[] bits = tmpstr.split("\\+");
+//
+//            System.out.println("bits[0] = " + bits[0]);
+//            System.out.println("bits[1] = " + bits[1]);
+//
+//            sum = Integer.parseInt(bits[0]) + Integer.parseInt(bits[1]);
+//
+//            return sum;
+//        }
+
+
+        boolean needToMulti = exp.contains(" * ");
+        boolean needToPlus = exp.contains(" + ") || exp.contains(" - ");
 
         boolean needToCompound = needToMulti && needToPlus;
 
@@ -89,4 +120,18 @@ public class Calc {
 
         // throw new RuntimeException("올바른 계산식이 아닙니다.");
     }
+
+    private static String stripOuterBrackets(String exp) {
+        int outerBracketsCount = 0;
+
+        while ( exp.charAt(outerBracketsCount) == '(' && exp.charAt(exp.length() - 1 - outerBracketsCount) == ')' ) {
+            outerBracketsCount++;
+        }
+
+        //다중 괄호 처리하기
+        if ( outerBracketsCount == 0 ) return exp;
+
+        return exp.substring(outerBracketsCount, exp.length() - outerBracketsCount);
+    }
+
 }
