@@ -7,71 +7,41 @@ public class Calc {
 
 
     public static int run(String exp) {
-
-        //1단계 - 기본 더하기 연산이 들어오면, 기본 연산을 수행할 수 있어야 한다.
-
-        //2단계 - 이제 어떤 연산이 들어왔는지 (+,-,*,/) 구별하고,
-        //각각 다르게 수행할 수 있어야 한다.
-
-        //3단계 - 연산이 두개가 연달아 들어와도 수행할 수 있어야 한다.
-        //ex) 10 + 20 + 30 == 60
-
-        //4단계 - 연산이 여러개 들어오는데, 각각 다른 연산이 들어와도 수행할 수 있어야 한다.
-        //ex) 10 + 20 - 30 == 0
-        //sol => replace를 통해 10 - 20 을 10 + -20과 같이 고친다.
-        // "- " => "+ -"
-        //이 과정을 거치면 -> 더하기가 들어왔는지 빼기가 들어왔는지 이제 알 필요가 없다.
-
-        //5단계 - 연산이 이제 3개가 아니라 몇개가 들어올지 모른다. 10개일지도...
-        //ex) 10 + 10 - 10 + 10 - 10 ...
-
-        //6단계 - 곱하기(*, multiply가 들어온다면??)
-
-        //7단계 - 더하기와 곱하기가 같이 나온다면? ( 10 + 2 * 3)
-
-        //8단계 - 더하기와 곱하기가 같이 나오는데, 연산이 3개 이상이라면? (10 + 20 + 3 * 5)
-
-        //9단계 - 이제 괄호의 처리도 가능해야 한다.
-        //어떻게 처리하면 좋을까 ? -> ( 를 발견하면 -> ) 가 나올떄 까지 탐색한다. (단, 괄호가 하나 더 나온다면 ...?)
-        // -> )를 찾으면, 그 사이의 내용을 가르고, 연산하고, 재 대입 한다.
-
-        //10단계 - 다중 괄호 처리하기
-
+        exp = exp.trim();
         exp = stripOuterBrackets(exp);
 
-        if(!exp.contains(" "))
-            return Integer.parseInt(exp);
-
-        boolean hasParse = exp.contains("(");
-
-//        if(hasParse)
-//        {
-//            int one = exp.indexOf("(");
-//            int two = exp.indexOf(")");
-//            int sum = 0;
-//
-//            String tmpstr;
-//
-//            tmpstr = exp.substring(one+1, two);
-//
-//            String[] bits = tmpstr.split("\\+");
-//
-//            System.out.println("bits[0] = " + bits[0]);
-//            System.out.println("bits[1] = " + bits[1]);
-//
-//            sum = Integer.parseInt(bits[0]) + Integer.parseInt(bits[1]);
-//
-//            return sum;
-//        }
-
+        // 단일항이 입력되면 바로 리턴
+        if ( !exp.contains(" ") ) return Integer.parseInt(exp);
 
         boolean needToMulti = exp.contains(" * ");
         boolean needToPlus = exp.contains(" + ") || exp.contains(" - ");
-
         boolean needToCompound = needToMulti && needToPlus;
+        boolean needToSplit =  exp.contains("(") || exp.contains(")");
 
-        if(needToCompound)
-        {
+        if ( needToSplit ) {
+            int bracketsCount = 0;
+            int splitPointIndex = -1;
+
+            for ( int i = 0; i < exp.length(); i++ ) {
+                if ( exp.charAt(i) == '(' ) {
+                    bracketsCount++;
+                }
+                else if ( exp.charAt(i) == ')' ) {
+                    bracketsCount--;
+                }
+
+                if ( bracketsCount == 0 ) {
+                    splitPointIndex = i;
+                    break;
+                }
+            }
+
+            String firstExp = exp.substring(0, splitPointIndex + 1);
+            String secondExp = exp.substring(splitPointIndex + 4);
+
+            return Calc.run(firstExp) + Calc.run(secondExp);
+        }
+        else if ( needToCompound ) {
             String[] bits = exp.split(" \\+ ");
             //분리하고 또 분리하는 방법 채택.
             // "10" + "2 * 3"
@@ -85,41 +55,34 @@ public class Calc {
 
             return run(newExp);
         }
-
-        if(needToPlus)
-        {
+        else if ( needToPlus ) {
             exp = exp.replaceAll("- ", "+ -");
 
             String[] bits = exp.split(" \\+ ");
 
             int sum = 0;
 
-            for(int i=0; i<bits.length; i++)
-            {
+            for (int i = 0; i < bits.length; i++) {
                 sum += Integer.parseInt(bits[i]);
             }
 
             return sum;
-
         }
-        else if(needToMulti)
-        {
+        else if ( needToMulti ) {
             String[] bits = exp.split(" \\* ");
 
             int sum = 1;
 
-            for(int i=0; i<bits.length; i++)
-            {
+            for (int i = 0; i < bits.length; i++) {
                 sum *= Integer.parseInt(bits[i]);
             }
 
             return sum;
         }
 
-        return 0;
-
-        // throw new RuntimeException("올바른 계산식이 아닙니다.");
+        throw new RuntimeException("올바른 계산식이 아닙니다.");
     }
+
 
     private static String stripOuterBrackets(String exp) {
         int outerBracketsCount = 0;
@@ -128,10 +91,8 @@ public class Calc {
             outerBracketsCount++;
         }
 
-        //다중 괄호 처리하기
         if ( outerBracketsCount == 0 ) return exp;
 
         return exp.substring(outerBracketsCount, exp.length() - outerBracketsCount);
     }
-
 }

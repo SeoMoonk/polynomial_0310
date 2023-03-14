@@ -7,6 +7,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CalcTests {
 
+    //1단계 : 실패하는 테스트를 만든다.
+    //2단계 : 꼼수를 써서 일단은 테스트를 통과 시킨다.
+    //3단계 : 리팩토링 한다.
+
     @Test
     @DisplayName("1000 + 280 == 1280")
     void t4() {
