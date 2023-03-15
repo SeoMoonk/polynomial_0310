@@ -39,7 +39,16 @@ public class Calc {
             String firstExp = exp.substring(0, splitPointIndex + 1);
             String secondExp = exp.substring(splitPointIndex + 4);
 
-            return Calc.run(firstExp) + Calc.run(secondExp);
+//            if(needToMulti)
+//            {
+//                return Calc.run(firstExp) * Calc.run(secondExp);
+//            }
+
+            char operationCode = exp.charAt(splitPointIndex + 2);
+
+            exp = Calc.run(firstExp) + " " + operationCode + " " + Calc.run(secondExp);
+
+            return Calc.run(exp);
         }
         else if ( needToCompound ) {
             String[] bits = exp.split(" \\+ ");
